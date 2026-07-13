@@ -49,7 +49,7 @@ The analysis is based on three main components:
 
 These three features form the core of the analysis and are used by the model to make a prediction.
 
-![Analysis Screenshot](frontend/assets/Screenshot%202026-07-13%20182842.png)
+![Analysis Screenshot](frontend/assets/frontend.png)
 
 ---
 
