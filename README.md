@@ -1,44 +1,83 @@
 # Spinal Kyphosis Detector Using Machine Learning
 
-A full-stack web application that predicts whether a patient has Kyphosis (a spinal condition) based on medical inputs, using machine learning. Built with a FastAPI backend and a 3-page HTML/CSS/JavaScript frontend styled with an X-ray-inspired dark theme.
+A full-stack web application that uses machine learning to help identify the likelihood of kyphosis based on three key clinical inputs. The project combines a FastAPI backend with a simple front-end experience to make the prediction process easy to understand and demonstrate.
 
-> ⚠️ **Medical Disclaimer:** This application is for educational and demonstration purposes only. It should never be used for actual medical diagnosis or treatment decisions. Always consult a qualified healthcare professional for medical advice.
+> ⚠️ Medical Disclaimer: This application is for educational and demonstration purposes only. It should not be used for actual medical diagnosis or treatment decisions. Always consult a qualified healthcare professional for medical advice.
 
 ---
 
-## Overview
+## Why This Project Matters
 
-This project uses a Decision Tree / Random Forest classifier trained on a 3,000-row synthetic dataset (modeled on real clinical patterns) to predict the presence or absence of kyphosis based on three surgical parameters:
+Kyphosis is a spinal condition in which the spine curves abnormally, often creating visible posture changes and, in more serious cases, pain, breathing issues, or reduced mobility. It can affect children, adolescents, and adults, and early detection is important because treatment outcomes are often better when the condition is identified early.
 
-| Feature | Description | Typical Range |
-|---|---|---|
-| **Age** | Patient age in months | 1 – 210 |
-| **Number** | Number of vertebrae involved in surgery | 2 – 10 |
-| **Start** | Topmost vertebra level operated on | 1 – 18 |
+In the real world, one of the biggest challenges is that kyphosis may not always be obvious at first glance, and diagnosis often depends on clinical assessment, imaging, and specialist review. This makes it an important problem for health technology, education, and decision support systems.
 
-The frontend has three pages: an educational **Home** page, an interactive **Predict** page, and an **About** page showing live model performance metrics.
+Our project aims to show how machine learning can support awareness and preliminary screening by analyzing a small set of structured features that are often available in medical records.
+
+![Kyphosis X-ray](frontend/assets/kyphosis-xray.png)
+
+---
+
+## Our Solution Approach
+
+This project builds a simple predictive model that learns from historical medical-style data and predicts whether kyphosis is present or absent. The solution is designed to be:
+
+- Easy to understand for students and beginners
+- Lightweight and fast to run
+- Suitable for a web-based demonstration
+- Focused on clear explainability rather than complex clinical deployment
+
+The system uses a decision tree classifier trained on the available dataset and exposes the prediction through a small web interface.
+
+---
+
+## How the Analysis Works
+
+The analysis is based on three main components:
+
+1. Age
+   - Age is an important factor because spinal development and structural changes often vary significantly with age.
+   - This helps the model understand whether the patient profile is more consistent with kyphosis or a normal spinal pattern.
+
+2. Number of Vertebrae Involved
+   - This refers to how many vertebrae are involved in the surgical or structural condition being considered.
+   - A higher number may indicate a more severe or widespread pattern.
+
+3. Starting Vertebrae Level
+   - This represents the topmost vertebra level involved in the condition.
+   - The location of the starting point can strongly affect how the curvature develops and is therefore useful for prediction.
+
+These three features form the core of the analysis and are used by the model to make a prediction.
+
+![Analysis Screenshot](frontend/assets/Screenshot%202026-07-13%20182842.png)
+
+---
+
+## Model Accuracy
+
+The model is trained using a decision tree classifier on a structured dataset with the three input features mentioned above. The training pipeline evaluates the model on a held-out test set, and the current implementation is designed to provide approximately 82% accuracy in this setup.
+
+This makes the project a strong educational example of how machine learning can be used in a medical-inspired prediction problem, while also keeping the scope practical and understandable.
 
 ---
 
 ## Project Structure
 
-```
-kyphosis-app/
-├── data/
-│   └── kyphosis_synthetic_3000.csv   # Training dataset (3,000 records)
+```text
+spinal-kyphosis-detector-using-machine-learning/
 ├── backend/
-│   ├── train_model.py                 # Model training script
-│   ├── model.pkl                       # Trained model (generated)
-│   ├── metrics.json                     # Saved model metrics (generated)
-│   ├── main.py                           # FastAPI server
-│   └── requirements.txt                   # Python dependencies
+│   ├── main.py
+│   ├── requirements.txt
+│   └── train_model.py
+├── Dataset/
+│   └── kyphosis.csv
 ├── frontend/
-│   ├── index.html                          # Home / educational page
-│   ├── predict.html                         # Prediction tool page
-│   ├── about.html                            # About / model metrics page
-│   ├── style.css                              # Shared dark/X-ray themed styling
-│   ├── script.js                               # Shared frontend logic
-│   └── assets/                                  # Diagrams & X-ray images
+│   ├── about.html
+│   ├── index.html
+│   ├── predict.html
+│   ├── script.js
+│   ├── style.css
+│   └── assets/
 └── README.md
 ```
 
@@ -54,9 +93,9 @@ kyphosis-app/
 ### 1. Clone the repository
 ```bash
 git clone <repository-url>
-cd kyphosis-app
+cd spinal-kyphosis-detector-using-machine-learning
 ```
-cd D:\projects\spinal-kyphosis-detector-using-machine-learningcd D:\projects\spinal-kyphosis-detector-using-machine-learning
+
 ### 2. Install backend dependencies
 ```bash
 cd backend
@@ -67,39 +106,28 @@ pip install -r requirements.txt
 ```bash
 python train_model.py
 ```
-This generates `model.pkl` and `metrics.json` in the `backend/` folder.
 
 ### 4. Start the backend server
 ```bash
 uvicorn main:app --reload --port 8000
 ```
-- API base: `http://localhost:8000`
-- Interactive docs: `http://localhost:8000/docs`
-- Health check: `http://localhost:8000/health`
 
 ### 5. Open the frontend
 ```bash
-cd frontend
+cd ../frontend
 python -m http.server 3000
 ```
-Then visit `http://localhost:3000/index.html`.
+
+Then open: http://localhost:3000/index.html
 
 ---
 
-## Using the App
+## Features of the App
 
-1. **Home** — Learn what kyphosis is, how it happens, who it affects, and see spine/X-ray comparison diagrams.
-2. **Predict** — Enter Age, Number of vertebrae, and Start level → get a prediction (Present/Absent) with a confidence score.
-3. **About** — See how the project works, the tech stack used, and live model accuracy/precision/recall/F1 metrics.
-
-### Example Inputs
-
-| Age (months) | Number | Start |
-|---|---|---|
-| 71 | 3 | 5 |
-| 158 | 3 | 14 |
-| 128 | 4 | 5 |
-| 42 | 6 | 11 |
+- Educational home page explaining kyphosis
+- Prediction page for entering age, number of vertebrae, and start level
+- About page showing the project concept and model performance
+- Simple web-based interface with a medical-themed design
 
 ---
 
@@ -107,53 +135,24 @@ Then visit `http://localhost:3000/index.html`.
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/health` | GET | Server health check |
-| `/predict` | POST | Returns `{ "prediction": "present"/"absent", "confidence": float }` |
-| `/metrics` | GET | Returns saved model accuracy/precision/recall/F1 scores |
-
-**Example request:**
-```bash
-curl -X POST http://localhost:8000/predict \
-  -H "Content-Type: application/json" \
-  -d '{"age": 71, "number": 3, "start": 5}'
-```
+| /health | GET | Server health check |
+| /predict | POST | Returns a prediction result |
+| /metrics | GET | Returns model-related metrics |
 
 ---
 
 ## Tech Stack
 
-**Backend:** Python · FastAPI · scikit-learn · pandas · joblib
-**Frontend:** HTML5 · CSS3 · Vanilla JavaScript
-**Model:** Decision Tree Classifier & Random Forest Classifier
-
----
-
-## Model Performance
-
-Trained on the 3,000-row synthetic dataset with an 80/20 stratified train-test split. Exact figures are available live via the `/metrics` endpoint and on the app's About page.
-
-| Model | Accuracy |
-|---|---|
-| Decision Tree | ~82% |
-| Random Forest | ~82–84% |
-
----
-
-## Troubleshooting
-
-| Issue | Fix |
-|---|---|
-| "Model not found" | Run `python train_model.py` before starting the server |
-| "Cannot connect to server" | Confirm the backend is running on `localhost:8000` and check CORS settings |
-| Metrics not loading on About page | Ensure `metrics.json` was generated and the backend is running |
-| Module import errors | Run `pip install -r requirements.txt`; confirm Python 3.8+ |
+- Backend: Python, FastAPI, scikit-learn, pandas, joblib
+- Frontend: HTML, CSS, JavaScript
+- Model: Decision Tree Classifier
 
 ---
 
 ## License
 
-This project is for educational purposes. The dataset is derived from the classic Kyphosis dataset used in machine learning education.
+This project is intended for educational and demonstration purposes only.
 
 ---
 
-**Built for machine learning education — not for clinical use.**
+Built for learning, experimentation, and awareness about kyphosis detection through machine learning.
