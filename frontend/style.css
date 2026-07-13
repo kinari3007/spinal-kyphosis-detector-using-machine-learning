@@ -305,7 +305,7 @@ body {
 }
 
 .form-group input:invalid {
-    border-color: #ff6b6b;
+    border-color: #dadada;
 }
 
 .form-group small {
