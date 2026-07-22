@@ -66,59 +66,151 @@ This makes the project a strong educational example of how machine learning can 
 ```text
 spinal-kyphosis-detector-using-machine-learning/
 ├── backend/
-│   ├── main.py
-│   ├── requirements.txt
-│   └── train_model.py
+│   ├── main.py                 # FastAPI server
+│   ├── requirements.txt        # Python dependencies
+│   ├── model.pkl              # Pre-trained model (generated)
+│   └── train_model.ipynb      # Jupyter notebook for model training
 ├── Dataset/
-│   └── kyphosis.csv
+│   └── kyphosis.csv           # Training dataset
 ├── frontend/
 │   ├── about.html
 │   ├── index.html
 │   ├── predict.html
 │   ├── script.js
 │   ├── style.css
-│   └── assets/
+│   └── assets/               # Images and static files
 └── README.md
 ```
 
 ---
 
-## Quick Start
+## Quick Start Guide
 
 ### Prerequisites
-- Python 3.8+
-- pip
+- Python 3.8+ installed
+- pip package manager
 - A modern web browser
 
-### 1. Clone the repository
+### Step 1: Clone the Repository
 ```bash
 git clone <repository-url>
 cd spinal-kyphosis-detector-using-machine-learning
 ```
 
-### 2. Install backend dependencies
+### Step 2: Set Up the Backend Environment
+Navigate to the backend directory and create a virtual environment:
 ```bash
 cd backend
+python -m venv .venv
+```
+
+### Step 3: Activate Virtual Environment
+
+**On Windows:**
+```cmd
+.\.venv\Scripts\activate
+```
+
+**On macOS/Linux:**
+```bash
+source .venv/bin/activate
+```
+
+You should see `(.venv)` in your command prompt when activated.
+
+### Step 4: Install Dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-### 3. Train the model
+### Step 5: Start the Backend Server
+The model is already trained and saved as `model.pkl`. Simply start the server:
 ```bash
-python train_model.py
+python -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-### 4. Start the backend server
-```bash
-uvicorn main:app --reload --port 8000
+You should see output like:
+```
+INFO:     Started server process
+INFO:     Waiting for application startup.
+Model loaded successfully from model.pkl
+FastAPI server started successfully!
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000
 ```
 
-### 5. Open the frontend
+### Step 6: Open the Frontend
+**Option 1 - Simple HTTP Server (Python):**
+Open a new terminal window and navigate to the frontend directory:
 ```bash
-cd ../frontend
+cd frontend
 python -m http.server 3000
 ```
 
-Then open: http://localhost:3000/index.html
+Then open your browser and go to: http://localhost:3000
+
+**Option 2 - Direct File Opening:**
+Navigate to the `frontend` folder and double-click `index.html`
+
+---
+
+## API Testing
+
+You can test the API directly:
+
+**Health Check:**
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+**Make a Prediction:**
+```bash
+curl -X POST http://127.0.0.1:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"age": 118, "number": 3, "start": 3}'
+```
+
+**View API Documentation:**
+Visit http://127.0.0.1:8000/docs in your browser
+
+---
+
+## Model Training (Optional)
+
+If you want to retrain the model or explore the training process:
+
+1. Install Jupyter:
+   ```bash
+   pip install jupyter matplotlib seaborn
+   ```
+
+2. Start Jupyter:
+   ```bash
+   jupyter notebook train_model.ipynb
+   ```
+
+3. Run all cells in the notebook to see the training process and analysis
+
+---
+
+## Troubleshooting
+
+**Virtual Environment Issues:**
+- Make sure you see `(.venv)` in your command prompt
+- If activation fails, try: `python -m venv .venv --clear`
+
+**Port Already in Use:**
+- Change the port: `--port 8001` instead of `--port 8000`
+- Check what's using the port: `netstat -ano | findstr :8000` (Windows)
+
+**Module Import Errors:**
+- Ensure virtual environment is activated
+- Reinstall dependencies: `pip install -r requirements.txt`
+
+**Frontend Not Loading:**
+- Try a different port for the frontend: `python -m http.server 3001`
+- Check that the backend is running on port 8000
+- Ensure your browser allows local connections
 
 ---
 
